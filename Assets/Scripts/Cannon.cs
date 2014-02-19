@@ -5,13 +5,16 @@ public class Cannon : MonoBehaviour
 {
 	public GameObject bombPrefab;
 	public Transform gunpoint;
-	public float bombPower = 300f;
-	public float bombTorque = 50f;
+	public float flyTime = 1f;
+	public HitSpot[] hitSpots;
+	public AudioSource fireSound;
+
+	private GameObject ship;
 
 	// Use this for initialization
 	void Start ()
 	{ 
-
+		ship = GameObject.Find ("Ship");
 	}
 	
 	// Update is called once per frame
@@ -45,9 +48,19 @@ public class Cannon : MonoBehaviour
 
 	public void Fire ()
 	{
-		Debug.Log ("Fire");
 		GameObject bomb = Instantiate (bombPrefab, gunpoint.position, Quaternion.identity) as GameObject;
-		bomb.rigidbody2D.AddForce (new Vector2 (0f, bombPower));
-		bomb.rigidbody2D.AddTorque (bombTorque);
+		GameObject target = hitSpots [Random.Range (0, hitSpots.Length)].gameObject;
+
+		iTween.MoveTo (bomb, iTween.Hash ("position", target.transform, "time", flyTime));
+		iTween.ScaleTo (bomb, new Vector3 (1f, 1f, 1f), flyTime);
+
+		fireSound.Play ();
+
+		playBacklashAnimationOnShip ();
+	}
+
+	private void playBacklashAnimationOnShip ()
+	{
+		iTween.PunchPosition (ship, new Vector3 (0f, -1f, 0f), 0.1f);
 	}
 }

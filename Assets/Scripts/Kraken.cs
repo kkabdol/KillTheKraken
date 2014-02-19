@@ -20,15 +20,6 @@ public class Kraken : MonoBehaviour
 		updateStiffening ();
 	}
 
-
-	void OnTriggerEnter2D (Collider2D other)
-	{
-		Debug.Log ("DestroyTrigger Destroyed an object");
-		Destroy (other.gameObject);
-
-		startStiffening ();
-	}
-
 	private void saveDefaultColor ()
 	{
 		this.defaultRenderColors = new Color[this.renderers.Length];
@@ -51,14 +42,21 @@ public class Kraken : MonoBehaviour
 		}
 	}
 
-	private void startStiffening ()
+	public void StartStiffening ()
 	{
+		playKnockbackAnimation ();
+
 		stiffenElapsedTime = 0f;
 
 		if (!isStiffened) {
 			changeColor (Color.yellow);
 			isStiffened = true;
 		}
+	}
+
+	private void playKnockbackAnimation ()
+	{
+		iTween.PunchPosition (this.gameObject, new Vector3 (0f, 0.5f, 0f), 0.1f);
 	}
 
 	private void updateStiffening ()
