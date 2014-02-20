@@ -176,9 +176,11 @@
      <Compile Include="Assets\Pixelplacement\iTween\Sample\SampleInfo.cs" />
      <Compile Include="Assets\Pixelplacement\iTweenPath\iTweenPath.cs" />
      <Compile Include="Assets\Scripts\Cannon.cs" />
+     <Compile Include="Assets\Scripts\Coin.cs" />
      <Compile Include="Assets\Scripts\DestroyTrigger.cs" />
      <Compile Include="Assets\Scripts\HitSpot.cs" />
      <Compile Include="Assets\Scripts\Kraken.cs" />
+     <Compile Include="Assets\Scripts\Monkey.cs" />
      <Compile Include="Assets\Scripts\TestBase.cs" />
      <Compile Include="Assets\Scripts\Wave.cs" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />

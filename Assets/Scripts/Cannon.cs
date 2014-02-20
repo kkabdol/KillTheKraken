@@ -52,7 +52,7 @@ public class Cannon : MonoBehaviour
 		GameObject target = hitSpots [Random.Range (0, hitSpots.Length)].gameObject;
 
 		iTween.MoveTo (bomb, iTween.Hash ("position", target.transform, "time", flyTime));
-		iTween.ScaleTo (bomb, new Vector3 (1f, 1f, 1f), flyTime);
+		iTween.ScaleTo (bomb, new Vector3 (0.5f, 0.5f, 0.5f), flyTime);
 
 		fireSound.Play ();
 

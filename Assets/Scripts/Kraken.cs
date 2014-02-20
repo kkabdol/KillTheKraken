@@ -3,12 +3,7 @@ using System.Collections;
 
 public class Kraken : MonoBehaviour
 {
-	public SpriteRenderer[] renderers;
-	private Color[] defaultRenderColors;
 
-	public float stiffenDuration = 0.1f;
-	public float stiffenElapsedTime = 0;
-	private bool isStiffened = false;
 
 	void Start ()
 	{
@@ -19,7 +14,11 @@ public class Kraken : MonoBehaviour
 	{
 		updateStiffening ();
 	}
-
+	
+	#region Color
+	public SpriteRenderer[] renderers;
+	private Color[] defaultRenderColors;
+	
 	private void saveDefaultColor ()
 	{
 		this.defaultRenderColors = new Color[this.renderers.Length];
@@ -41,6 +40,12 @@ public class Kraken : MonoBehaviour
 			this.renderers [i].material.color = this.defaultRenderColors [i];
 		}
 	}
+	#endregion
+
+	#region Stiffening
+	public float stiffenDuration = 0.1f;
+	private float stiffenElapsedTime = 0;
+	private bool isStiffened = false;
 
 	public void StartStiffening ()
 	{
@@ -71,4 +76,35 @@ public class Kraken : MonoBehaviour
 		}
 
 	}
+	#endregion
+
+	#region Coin
+	public GameObject coinPrefab;
+	public Transform coinFrom;
+	public Transform[] coinTo;
+	public AudioSource coinSound;
+	public float minCoinFlyTime = 2f;
+	public float maxCoinFlyTime = 4f;
+
+	public void ScatterCoins (int count)
+	{
+		for (int i=0; i<count; ++i) {
+			Vector3 to = new Vector3 (Random.Range (coinTo [0].position.x, coinTo [1].position.x), 
+		                         Random.Range (coinTo [0].position.y, coinTo [1].position.y),
+		                         Random.Range (coinTo [0].position.z, coinTo [1].position.z));
+			float flyTime = Random.Range (minCoinFlyTime, maxCoinFlyTime);
+
+			GameObject coin = Instantiate (coinPrefab, coinFrom.position, Quaternion.identity) as GameObject;
+			coin.GetComponent<Wave> ().needDarkening = true;
+
+			iTween.MoveTo (coin, iTween.Hash ("position", to, "time", flyTime));
+			iTween.ScaleTo (coin, new Vector3 (1f, 1f, 1f), flyTime);
+			coinSound.Play ();
+		}
+
+
+
+	}
+
+	#endregion
 }

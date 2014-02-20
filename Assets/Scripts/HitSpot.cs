@@ -16,6 +16,7 @@ public class HitSpot : MonoBehaviour
 		Destroy (other.gameObject);
 
 		kraken.StartStiffening ();
+		kraken.ScatterCoins (1);
 	}
 
 }
