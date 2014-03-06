@@ -3,13 +3,8 @@ using System.Collections;
 
 public class HitSpot : MonoBehaviour
 {
-	private Kraken kraken;
-
-	void Start ()
-	{
-		kraken = GameObject.Find ("Kraken").GetComponent<Kraken> () as Kraken;
-	}
-
+	public Kraken kraken;
+	
 	void OnTriggerEnter2D (Collider2D other)
 	{
 		Debug.Log ("DestroyTrigger Destroyed an object");

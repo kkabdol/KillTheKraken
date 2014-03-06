@@ -3,18 +3,22 @@ using System.Collections;
 
 public class TestBase : MonoBehaviour
 {
-	// real ocean look and feel test	
 	public GameObject realBackground;
-	private bool isRealBackgroundTurnedOn = false;
-	public void switchRealBackground ()
+	public GameObject upgradePanel;
+
+	private bool isTestBaseTurnedOn = false;
+	public void switchTestBase ()
 	{
-		if (isRealBackgroundTurnedOn == true) {
+		if (isTestBaseTurnedOn == true) {
+			isTestBaseTurnedOn = false;
+
 			realBackground.SetActive (false);
-			isRealBackgroundTurnedOn = false;
+			upgradePanel.SetActive (false);
 		} else {
+			isTestBaseTurnedOn = true;
+
 			realBackground.SetActive (true);
-			isRealBackgroundTurnedOn = true;
+			upgradePanel.SetActive (true);
 		}
 	}
-	
 }

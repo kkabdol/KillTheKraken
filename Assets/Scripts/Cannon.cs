@@ -3,64 +3,101 @@ using System.Collections;
 
 public class Cannon : MonoBehaviour
 {
-	public GameObject bombPrefab;
+	void Start ()
+	{
+		updateHitPointBar ();
+	}
+	
+	void Update ()
+	{
+		updateHitPoint ();
+	}
+
+	#region fire
 	public Transform gunpoint;
 	public float flyTime = 1f;
 	public HitSpot[] hitSpots;
 	public AudioSource fireSound;
-
-	private GameObject ship;
-
-	// Use this for initialization
-	void Start ()
-	{ 
-		ship = GameObject.Find ("Ship");
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		if (isTouched ()) {
-			Fire ();
-		}
-	}
-
-	bool isTouched ()
-	{
-		if (Input.GetMouseButtonDown (0)) {
-//			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);		
-//			RaycastHit hit;
-//			return this.collider.Raycast (ray, out hit, 100.0f);
-
-			Vector3 point = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			return this.collider2D.OverlapPoint (new Vector2 (point.x, point.y));
-		} else {
-			return false;
-		}
-	}
-	
-	public void FaceTo (Vector3 target)
-	{
-		Vector3 relativePos = target - transform.position;
-		Quaternion rotation = Quaternion.LookRotation (relativePos, Vector3.back);
-		transform.rotation = rotation;
-	}
+	public Ship ship;
 
 	public void Fire ()
 	{
-		GameObject bomb = Instantiate (bombPrefab, gunpoint.position, Quaternion.identity) as GameObject;
+		Bomb bomb = ship.PopBomb ();
+		iTween.Stop (bomb.gameObject);
+		bomb.transform.position = gunpoint.position;
+
 		GameObject target = hitSpots [Random.Range (0, hitSpots.Length)].gameObject;
 
-		iTween.MoveTo (bomb, iTween.Hash ("position", target.transform, "time", flyTime));
-		iTween.ScaleTo (bomb, new Vector3 (0.5f, 0.5f, 0.5f), flyTime);
+		iTween.MoveTo (bomb.gameObject, iTween.Hash ("position", target.transform, "time", flyTime));
+		iTween.ScaleTo (bomb.gameObject, new Vector3 (0.5f, 0.5f, 0.5f), flyTime);
 
 		fireSound.Play ();
-
 		playBacklashAnimationOnShip ();
+
+		consumeHitPoint (bomb.mass);
 	}
 
 	private void playBacklashAnimationOnShip ()
 	{
-		iTween.PunchPosition (ship, new Vector3 (0f, -1f, 0f), 0.1f);
+		iTween.PunchPosition (ship.gameObject, new Vector3 (0f, -1f, 0f), 0.1f);
 	}
+
+	#endregion
+
+	#region hit point
+	public UIProgressBar hitPointBar;
+	private float maxHitPoint = 100.0f;
+	private float curHitPoint = 100.0f;
+	private float recoverySpeed = 3.0f;
+
+	public void Upgrade (int level)
+	{
+		float max;
+		float recovery;
+
+		switch (level) {
+		case 2:
+			max = 200.0f;
+			recovery = 2.0f;
+			break;
+
+		case 1:
+		default:
+			max = 100.0f;
+			recovery = 1.0f;
+			break;
+		}
+
+		setAttributes (max, recovery);
+	}
+
+	private void setAttributes (float maxHitPoint, float recoverySpeed)
+	{
+		this.maxHitPoint = maxHitPoint;
+		this.curHitPoint = recoverySpeed;
+		this.recoverySpeed = recoverySpeed;
+		updateHitPointBar ();
+	}
+
+	private void consumeHitPoint (float amount)
+	{
+		this.curHitPoint = Mathf.Max (this.curHitPoint - amount, 0f);
+		updateHitPointBar ();
+	}
+
+	private void updateHitPoint ()
+	{
+		if (curHitPoint < maxHitPoint) {
+			curHitPoint = Mathf.Min (curHitPoint + recoverySpeed * Time.deltaTime, maxHitPoint);
+			updateHitPointBar ();
+		}
+
+	}
+
+	private void updateHitPointBar ()
+	{
+		hitPointBar.value = this.curHitPoint / this.maxHitPoint;
+	}
+
+	#endregion
 }

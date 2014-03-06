@@ -13,6 +13,7 @@ public class Monkey : MonoBehaviour
 	public Transform left;
 	public Transform right;
 	public float moveSpeed = 0.1f;
+	public Status status;
 
 
 	// Use this for initialization
@@ -34,6 +35,9 @@ public class Monkey : MonoBehaviour
 
 			Destroy (other.gameObject);
 			coinSound.Play ();
+
+			status.addMoney (1);
+
 		}
 	}
 
