@@ -62,6 +62,9 @@ public class Cannon : MonoBehaviour
 		case 2:
 			max = 200.0f;
 			break;
+		case 3:
+			max = 300.0f;
+			break;
 
 		case 1:
 		default:
@@ -83,10 +86,11 @@ public class Cannon : MonoBehaviour
 		
 	}
 
-	private void setMaxHitPoint (float maxHitPoint)
+	private void setMaxHitPoint (float max)
 	{
-		this.maxHitPoint = maxHitPoint;
-		this.curHitPoint = maxHitPoint;
+		this.maxHitPoint = max;
+		this.curHitPoint = max;
+		isRefeshing = false;
 	}
 
 	private void consumeHitPoint (float amount)

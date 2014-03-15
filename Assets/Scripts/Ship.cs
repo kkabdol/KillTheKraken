@@ -12,6 +12,7 @@ public class Ship : MonoBehaviour
 
 	#region bomb
 	public Bomb[] bombs;
+	public int[] bombPercentages;
 	public Transform[] bombPos;
 	public Transform bombBasePos;
 	private List<Bomb> bombList = new List<Bomb> ();
@@ -28,7 +29,20 @@ public class Ship : MonoBehaviour
 	private void addRandomBombToList (int count, bool resetPosInstantly)
 	{
 		for (int i=0; i<count; ++i) {
-			Bomb b = Instantiate (bombs [Random.Range (0, bombs.Length)]) as Bomb;
+			int index = 0;
+
+			int per = Random.Range (0, 100);
+			for (int j=0; j<bombPercentages.Length; ++j) {
+				if (per < bombPercentages [j]) {
+					index = j;
+					break;
+				} else {
+					per -= bombPercentages [j];
+				}
+			}
+
+
+			Bomb b = Instantiate (bombs [index]) as Bomb;
 			b.transform.parent = transform;
 			bombList.Add (b);
 		}

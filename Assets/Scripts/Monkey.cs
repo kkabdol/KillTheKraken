@@ -36,7 +36,7 @@ public class Monkey : MonoBehaviour
 			Destroy (other.gameObject);
 			audio.Play ();
 
-			status.AddMoney (1);
+			status.money += 1;
 		}
 	}
 
