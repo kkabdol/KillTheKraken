@@ -3,21 +3,11 @@ using System.Collections;
 
 public class Status : MonoBehaviour
 {
-	#region money
-	private int money = 0;
-	public void addMoney (int amount)
+	public int money = 0;
+	public void AddMoney (int amount)
 	{
 		money += amount;
-		updateMoneyLabel ();
 	}
-
-	public UILabel moneyLabel;
-	private void updateMoneyLabel ()
-	{
-		moneyLabel.text = money.ToString ();
-	}
-
-	#endregion
 
 
 	#region upgrade
@@ -55,16 +45,10 @@ public class Status : MonoBehaviour
 	{
 		if (level.IsUpgradable () &&
 			level.UpgradePrice () <= money) {
-			addMoney (-level.UpgradePrice ());
+			AddMoney (-level.UpgradePrice ());
 			level.Upgrade ();
 		}
 	}
 
 	#endregion upgrade
-
-	void Start ()
-	{
-		updateMoneyLabel ();
-	}
-
 }

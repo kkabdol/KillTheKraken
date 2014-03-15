@@ -34,10 +34,9 @@ public class Monkey : MonoBehaviour
 			canGetCoin = false;
 
 			Destroy (other.gameObject);
-			coinSound.Play ();
+			audio.Play ();
 
-			status.addMoney (1);
-
+			status.AddMoney (1);
 		}
 	}
 
@@ -46,8 +45,6 @@ public class Monkey : MonoBehaviour
 
 	private void move (Direction dir)
 	{
-		Debug.Log ("move " + dir);
-
 		Vector3 to;
 		Direction next;
 		Vector3 oldScale = this.gameObject.transform.localScale;
@@ -72,9 +69,9 @@ public class Monkey : MonoBehaviour
 
 	#region Get Coin
 	public float coinGetTime = 1f;
+
 	private float coinGetElapsed = 0f;
 	private bool canGetCoin = true;
-	public AudioSource coinSound;
 
 	private void initCoinGet ()
 	{

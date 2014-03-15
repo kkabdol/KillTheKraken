@@ -3,18 +3,18 @@ using System.Collections;
 
 public class Upgradable : MonoBehaviour
 {
-	public int[] nextGradePrice;
-	public int CurGrade = 1;
+	public int[] nextLevelPrice;
+	public int CurLevel = 1;
 
-	public int MaxGrade ()
+	public int MaxLevel ()
 	{
-		return nextGradePrice.Length;
+		return nextLevelPrice.Length;
 	}
 
 	public int UpgradePrice ()
 	{
 		if (IsUpgradable ()) {
-			return nextGradePrice [CurGrade - 1];
+			return nextLevelPrice [CurLevel - 1];
 		} else {
 			return 0;
 		}
@@ -23,13 +23,14 @@ public class Upgradable : MonoBehaviour
 	public void Upgrade ()
 	{
 		if (IsUpgradable ()) {
-			CurGrade += 1;
+			CurLevel += 1;
+			gameObject.SendMessage ("Upgrade", CurLevel);
 		}
 	}
 
 	public bool IsUpgradable ()
 	{
-		return (CurGrade < MaxGrade ());
+		return (CurLevel < MaxLevel ());
 	}
 	
 

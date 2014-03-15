@@ -176,6 +176,7 @@
      <Compile Include="Assets\Frameworks\Pixelplacement\iTween\Sample\SampleInfo.cs" />
      <Compile Include="Assets\Frameworks\Pixelplacement\iTweenPath\iTweenPath.cs" />
      <Compile Include="Assets\Scripts\Bomb.cs" />
+     <Compile Include="Assets\Scripts\Boy.cs" />
      <Compile Include="Assets\Scripts\Cannon.cs" />
      <Compile Include="Assets\Scripts\Coin.cs" />
      <Compile Include="Assets\Scripts\DestroyTrigger.cs" />
@@ -184,9 +185,14 @@
      <Compile Include="Assets\Scripts\Monkey.cs" />
      <Compile Include="Assets\Scripts\Ship.cs" />
      <Compile Include="Assets\Scripts\Status.cs" />
+     <Compile Include="Assets\Scripts\Tags.cs" />
      <Compile Include="Assets\Scripts\TestBase.cs" />
+     <Compile Include="Assets\Scripts\UIHPBar.cs" />
+     <Compile Include="Assets\Scripts\UIMoneyLabel.cs" />
+     <Compile Include="Assets\Scripts\UIUpgradeButton.cs" />
      <Compile Include="Assets\Scripts\Upgradable.cs" />
      <Compile Include="Assets\Scripts\Wave.cs" />
+     <Compile Include="Assets\UIFireButton.cs" />
      <None Include="Assets\Frameworks\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\Frameworks\NGUI\ReadMe - 3.0.8 f7.txt" />
      <None Include="Assets\Frameworks\NGUI\Examples\Models\Orc\Orc Skin.shader" />

@@ -4,7 +4,6 @@ using System.Collections;
 public class Kraken : MonoBehaviour
 {
 
-
 	void Start ()
 	{
 		saveDefaultColor ();

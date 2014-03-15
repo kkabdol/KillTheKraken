@@ -3,29 +3,28 @@ using System.Collections;
 
 public class Cannon : MonoBehaviour
 {
-	void Start ()
+	private Ship ship;
+
+	void Awake ()
 	{
-		updateHitPointBar ();
-	}
-	
-	void Update ()
-	{
-		updateHitPoint ();
+		ship = GameObject.FindGameObjectWithTag (Tags.ship).GetComponent<Ship> ();
 	}
 
 	#region fire
 	public Transform gunpoint;
 	public float flyTime = 1f;
-	public HitSpot[] hitSpots;
-	public AudioSource fireSound;
-	public Ship ship;
+	public Transform[] hitPoints;
 
 	public void Fire ()
 	{
+		if (isRefeshing) {
+			return;
+		}
+
 		Bomb bomb = ship.PopBomb ();
 		if (bomb.isRedBomb) {
 			consumeHitPoint (bomb.mass);
-			setDisable ();
+			isRefeshing = true;
 			Destroy (bomb.gameObject);
 			return;
 		}
@@ -33,12 +32,11 @@ public class Cannon : MonoBehaviour
 		iTween.Stop (bomb.gameObject);
 		bomb.transform.position = gunpoint.position;
 
-		GameObject target = hitSpots [Random.Range (0, hitSpots.Length)].gameObject;
+		Transform target = hitPoints [Random.Range (0, hitPoints.Length)];
+		iTween.MoveTo (bomb.gameObject, iTween.Hash ("position", target, "time", flyTime));
+		iTween.ScaleTo (bomb.gameObject, iTween.Hash ("scale", target, "time", flyTime));
 
-		iTween.MoveTo (bomb.gameObject, iTween.Hash ("position", target.transform, "time", flyTime));
-		iTween.ScaleTo (bomb.gameObject, new Vector3 (0.5f, 0.5f, 0.5f), flyTime);
-
-		fireSound.Play ();
+		audio.Play ();
 		playBacklashAnimationOnShip ();
 
 		consumeHitPoint (bomb.mass);
@@ -52,88 +50,50 @@ public class Cannon : MonoBehaviour
 	#endregion
 
 	#region hit point
-	public UIProgressBar hitPointBar;
-	public UISprite hitPointBarSprite;
-	public UIButton fireButton;
 	public float maxHitPoint = 100.0f;
-	public float recoverySpeed = 20.0f;
-
-	private float curHitPoint = 100.0f;
-	private bool isRefeshing = false;
+	public float curHitPoint = 100.0f;
+	public bool isRefeshing = false;
 
 	public void Upgrade (int level)
 	{
 		float max;
-		float recovery;
 
 		switch (level) {
 		case 2:
 			max = 200.0f;
-			recovery = 2.0f;
 			break;
 
 		case 1:
 		default:
 			max = 100.0f;
-			recovery = 1.0f;
 			break;
 		}
 
-		setAttributes (max, recovery);
+		setMaxHitPoint (max);
 	}
 
-	private void setAttributes (float maxHitPoint, float recoverySpeed)
+	public void Cooldown (float amount)
+	{
+		if (curHitPoint < maxHitPoint) {
+			curHitPoint = Mathf.Min (maxHitPoint, curHitPoint + amount);
+			if (isRefeshing && curHitPoint >= maxHitPoint) {
+				isRefeshing = false;
+			}
+		}
+		
+	}
+
+	private void setMaxHitPoint (float maxHitPoint)
 	{
 		this.maxHitPoint = maxHitPoint;
-		this.curHitPoint = recoverySpeed;
-		this.recoverySpeed = recoverySpeed;
-		updateHitPointBar ();
+		this.curHitPoint = maxHitPoint;
 	}
 
 	private void consumeHitPoint (float amount)
 	{
 		curHitPoint = Mathf.Max (0f, curHitPoint - amount);
 		if (curHitPoint <= 0) {
-			setDisable ();
-		}
-		updateHitPointBar ();
-	}
-
-	private void updateHitPoint ()
-	{
-		if (curHitPoint < maxHitPoint) {
-			curHitPoint = Mathf.Min (maxHitPoint, curHitPoint + recoverySpeed * Time.deltaTime);
-			updateHitPointBar ();
-
-			if (isRefeshing && curHitPoint >= maxHitPoint) {
-				setEnable ();
-			}
-		}
-
-	}
-
-	private void updateHitPointBar ()
-	{
-		hitPointBar.value = curHitPoint / maxHitPoint;
-	}
-
-	private void setEnable ()
-	{
-		hitPointBarSprite.color = Color.red;
-		isRefeshing = false;
-		fireButton.enabled = true;
-		foreach (UISprite sprite in fireButton.GetComponentsInChildren<UISprite>()) {
-			sprite.color = Color.white;
-		}
-	}
-
-	private void setDisable ()
-	{
-		isRefeshing = true;
-		hitPointBarSprite.color = Color.green;
-		fireButton.enabled = false;
-		foreach (UISprite sprite in fireButton.GetComponentsInChildren<UISprite>()) {
-			sprite.color = Color.grey;
+			isRefeshing = true;
 		}
 	}
 
