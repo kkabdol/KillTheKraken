@@ -8,6 +8,7 @@ public class Ship : MonoBehaviour
 	#region bomb
 	public Bomb[] bombs;
 	public Transform[] bombPos;
+	public Transform bombBasePos;
 	private List<Bomb> bombList = new List<Bomb> ();
 
 	public Bomb PopBomb ()
@@ -23,6 +24,7 @@ public class Ship : MonoBehaviour
 	{
 		for (int i=0; i<count; ++i) {
 			Bomb b = Instantiate (bombs [Random.Range (0, bombs.Length)]) as Bomb;
+			b.transform.parent = transform;
 			bombList.Add (b);
 		}
 		
@@ -32,14 +34,27 @@ public class Ship : MonoBehaviour
 	private void resetBombPos (bool resetPosInstantly)
 	{
 		for (int i=0; i<bombList.Count; ++i) {
-			if (resetPosInstantly || i == bombList.Count - 1) {
-				bombList [i].transform.position = bombPos [i].position;
-				bombList [i].transform.localScale = bombPos [i].localScale;
+			if (resetPosInstantly) {
+				moveBomb (bombList [i], bombPos [i]);
+			} else if (i == bombList.Count - 1) {
+				moveBomb (bombList [i], bombBasePos);
+				tweenMoveBomb (bombList [i], bombPos [i], .5f);
 			} else {
-				iTween.MoveTo (bombList [i].gameObject, bombPos [i].position, 0.5f);
-				iTween.ScaleTo (bombList [i].gameObject, bombPos [i].localScale, 0.5f);
+				tweenMoveBomb (bombList [i], bombPos [i], .5f);
 			}
 		}
+	}
+
+	private void moveBomb (Bomb bomb, Transform to)
+	{
+		bomb.transform.position = to.position;
+		bomb.transform.localScale = to.localScale;
+	}
+
+	private void tweenMoveBomb (Bomb bomb, Transform to, float time)
+	{
+		iTween.MoveTo (bomb.gameObject, to.position, time);
+		iTween.ScaleTo (bomb.gameObject, to.localScale, time);
 	}
 	
 	#endregion

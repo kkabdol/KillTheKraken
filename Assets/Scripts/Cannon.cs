@@ -46,9 +46,13 @@ public class Cannon : MonoBehaviour
 
 	#region hit point
 	public UIProgressBar hitPointBar;
-	private float maxHitPoint = 100.0f;
+	public UISprite hitPointBarSprite;
+	public UIButton fireButton;
+	public float maxHitPoint = 100.0f;
+	public float recoverySpeed = 20.0f;
+
 	private float curHitPoint = 100.0f;
-	private float recoverySpeed = 3.0f;
+	private bool isRefeshing = false;
 
 	public void Upgrade (int level)
 	{
@@ -81,22 +85,43 @@ public class Cannon : MonoBehaviour
 
 	private void consumeHitPoint (float amount)
 	{
-		this.curHitPoint = Mathf.Max (this.curHitPoint - amount, 0f);
+		curHitPoint = Mathf.Max (0f, curHitPoint - amount);
+		if (curHitPoint <= 0) {
+			setDisable ();
+		}
 		updateHitPointBar ();
 	}
 
 	private void updateHitPoint ()
 	{
 		if (curHitPoint < maxHitPoint) {
-			curHitPoint = Mathf.Min (curHitPoint + recoverySpeed * Time.deltaTime, maxHitPoint);
+			curHitPoint = Mathf.Min (maxHitPoint, curHitPoint + recoverySpeed * Time.deltaTime);
 			updateHitPointBar ();
+
+			if (isRefeshing && curHitPoint >= maxHitPoint) {
+				setEnable ();
+			}
 		}
 
 	}
 
 	private void updateHitPointBar ()
 	{
-		hitPointBar.value = this.curHitPoint / this.maxHitPoint;
+		hitPointBar.value = curHitPoint / maxHitPoint;
+	}
+
+	private void setEnable ()
+	{
+		hitPointBarSprite.color = Color.red;
+		isRefeshing = false;
+		fireButton.enabled = true;
+	}
+
+	private void setDisable ()
+	{
+		isRefeshing = true;
+		hitPointBarSprite.color = Color.green;
+		fireButton.enabled = false;
 	}
 
 	#endregion
