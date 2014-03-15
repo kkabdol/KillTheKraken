@@ -23,6 +23,13 @@ public class Cannon : MonoBehaviour
 	public void Fire ()
 	{
 		Bomb bomb = ship.PopBomb ();
+		if (bomb.isRedBomb) {
+			consumeHitPoint (bomb.mass);
+			setDisable ();
+			Destroy (bomb.gameObject);
+			return;
+		}
+
 		iTween.Stop (bomb.gameObject);
 		bomb.transform.position = gunpoint.position;
 
@@ -115,6 +122,9 @@ public class Cannon : MonoBehaviour
 		hitPointBarSprite.color = Color.red;
 		isRefeshing = false;
 		fireButton.enabled = true;
+		foreach (UISprite sprite in fireButton.GetComponentsInChildren<UISprite>()) {
+			sprite.color = Color.white;
+		}
 	}
 
 	private void setDisable ()
@@ -122,6 +132,9 @@ public class Cannon : MonoBehaviour
 		isRefeshing = true;
 		hitPointBarSprite.color = Color.green;
 		fireButton.enabled = false;
+		foreach (UISprite sprite in fireButton.GetComponentsInChildren<UISprite>()) {
+			sprite.color = Color.grey;
+		}
 	}
 
 	#endregion

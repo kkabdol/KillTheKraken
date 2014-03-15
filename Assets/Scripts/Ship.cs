@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 public class Ship : MonoBehaviour
 {
+	
+	void Start ()
+	{
+		addRandomBombToList (bombPos.Length, true);
+	}
 
 	#region bomb
 	public Bomb[] bombs;
@@ -59,9 +64,13 @@ public class Ship : MonoBehaviour
 	
 	#endregion
 
-	void Start ()
+	#region trash current red bomb
+	public void trashRedBomb ()
 	{
-		addRandomBombToList (bombPos.Length, true);
+		if (bombList [0].isRedBomb) {
+			Bomb bomb = PopBomb ();
+			Destroy (bomb.gameObject);
+		}
 	}
-	
+	#endregion
 }
