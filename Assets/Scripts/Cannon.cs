@@ -50,30 +50,9 @@ public class Cannon : MonoBehaviour
 	#endregion
 
 	#region hit point
+	public bool isRefeshing = false;
 	public float maxHitPoint = 100.0f;
 	public float curHitPoint = 100.0f;
-	public bool isRefeshing = false;
-
-	public void Upgrade (int level)
-	{
-		float max;
-
-		switch (level) {
-		case 2:
-			max = 200.0f;
-			break;
-		case 3:
-			max = 300.0f;
-			break;
-
-		case 1:
-		default:
-			max = 100.0f;
-			break;
-		}
-
-		setMaxHitPoint (max);
-	}
 
 	public void Cooldown (float amount)
 	{
@@ -101,5 +80,25 @@ public class Cannon : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+	#region upgrade
+	private float[] maxHitPointList = {
+		100f,
+		150f,
+		200f,
+		250f,
+		300f,
+		350f,
+		400f,
+		450f,
+	};
+	
+	public void LevelUp (int level)
+	{
+		if (level >= 2 || level < maxHitPointList.Length) {
+			setMaxHitPoint (maxHitPointList [level - 2]);
+		}
+	}
 	#endregion
 }

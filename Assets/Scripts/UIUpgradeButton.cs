@@ -8,6 +8,7 @@ public class UIUpgradeButton : MonoBehaviour
 	private UIButton button;
 
 	private int level = 0;
+	private int oldPrice = 0;	// for price cheat
 		
 	void Awake ()
 	{
@@ -15,10 +16,19 @@ public class UIUpgradeButton : MonoBehaviour
 		button = GetComponentInChildren<UIButton> ();
 	}
 
+	void Start ()
+	{
+		oldPrice = upgradable.UpgradePrice ();
+	}
+
 	void Update ()
 	{
-		if (level != upgradable.CurLevel) {
+		if (level != upgradable.CurLevel ||
+			oldPrice != upgradable.UpgradePrice ()) {
+
 			level = upgradable.CurLevel;
+			oldPrice = upgradable.UpgradePrice ();
+
 			if (!upgradable.IsUpgradable ()) {
 				label.text = "Max Level";
 			} else {

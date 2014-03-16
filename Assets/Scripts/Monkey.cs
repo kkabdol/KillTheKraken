@@ -30,13 +30,15 @@ public class Monkey : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (canGetCoin) {
+		if (canGetCoin && other.tag.Equals (Tags.coin)) {
 			canGetCoin = false;
 
-			Destroy (other.gameObject);
+			Coin coin = other.GetComponent<Coin> ();
+			status.money += coin.price;
+
 			audio.Play ();
 
-			status.money += 1;
+			Destroy (other.gameObject);
 		}
 	}
 
@@ -89,6 +91,39 @@ public class Monkey : MonoBehaviour
 			}
 		}
 	}
+	#endregion
 
+	#region upgrade
+	private float[] moveSpeedList = {
+		1.0f,
+		1.5f,
+		2.0f,
+		2.5f,
+		3.0f,
+		3.5f,
+		4.0f,
+		4.5f,
+	};
+	private float[] coinGetTimeList = {
+		1f,
+		.9f,
+		.8f,
+		.7f,
+		.6f,
+		.5f,
+		.4f,
+		.3f,
+	};
+	
+	public void LevelUp (int level)
+	{
+		if (level >= 2 || level < moveSpeedList.Length) {
+			moveSpeed = moveSpeedList [level - 2];
+		}
+
+		if (level >= 2 || level < coinGetTimeList.Length) {
+			coinGetTime = coinGetTimeList [level - 2];
+		}
+	}
 	#endregion
 }

@@ -3,7 +3,16 @@ using System.Collections;
 
 public class Upgradable : MonoBehaviour
 {
-	public int[] nextLevelPrice;
+	public int[] nextLevelPrice = {
+		1000,
+		5000,
+		10000,
+		50000,
+		100000,
+		500000,
+		1000000,
+		10000000,
+	};
 	public int CurLevel = 1;
 		
 	private Status status;
@@ -33,7 +42,9 @@ public class Upgradable : MonoBehaviour
 			status.money -= UpgradePrice ();
 
 			CurLevel += 1;
-			gameObject.SendMessage ("Upgrade", CurLevel);
+			gameObject.SendMessage ("LevelUp", CurLevel);
+
+			Debug.Log ("Upgrade " + tag + " to " + CurLevel);
 		}
 	}
 

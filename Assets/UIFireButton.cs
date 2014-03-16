@@ -14,7 +14,6 @@ public class UIFireButton : MonoBehaviour
 	
 	void Update ()
 	{
-		Debug.Log ("cannon.isRefeshing:" + cannon.isRefeshing + ", UIFireButton.isRefreshing:" + button.enabled);
 		if (cannon.isRefeshing && button.enabled) {
 			button.enabled = false;
 			foreach (UISprite sprite in button.GetComponentsInChildren<UISprite>()) {

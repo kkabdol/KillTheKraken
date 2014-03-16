@@ -3,15 +3,21 @@ using System.Collections;
 
 public class HitSpot : MonoBehaviour
 {
-	public Kraken kraken;
+	private Kraken kraken;
+
+	void Awake ()
+	{
+		kraken = GameObject.FindGameObjectWithTag (Tags.kraken).GetComponent<Kraken> ();
+	}
 	
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		Debug.Log ("DestroyTrigger Destroyed an object");
-		Destroy (other.gameObject);
+		if (other.tag.Equals (Tags.blackBomb)) {
+			float power = other.GetComponent<Bomb> ().power;
+			kraken.Hit (power);
 
-		kraken.StartStiffening ();
-		kraken.ScatterCoins (1);
+			Destroy (other.gameObject);
+		}
 	}
 
 }

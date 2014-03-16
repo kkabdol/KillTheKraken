@@ -181,6 +181,7 @@
      <Compile Include="Assets\Scripts\Coin.cs" />
      <Compile Include="Assets\Scripts\DestroyTrigger.cs" />
      <Compile Include="Assets\Scripts\HitSpot.cs" />
+     <Compile Include="Assets\Scripts\InputController.cs" />
      <Compile Include="Assets\Scripts\Kraken.cs" />
      <Compile Include="Assets\Scripts\Monkey.cs" />
      <Compile Include="Assets\Scripts\Ship.cs" />

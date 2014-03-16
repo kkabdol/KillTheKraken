@@ -12,7 +12,7 @@ public class Ship : MonoBehaviour
 
 	#region bomb
 	public Bomb[] bombs;
-	public int[] bombPercentages;
+	public int[] bombChance;
 	public Transform[] bombPos;
 	public Transform bombBasePos;
 	private List<Bomb> bombList = new List<Bomb> ();
@@ -32,12 +32,12 @@ public class Ship : MonoBehaviour
 			int index = 0;
 
 			int per = Random.Range (0, 100);
-			for (int j=0; j<bombPercentages.Length; ++j) {
-				if (per < bombPercentages [j]) {
+			for (int j=0; j<bombChance.Length; ++j) {
+				if (per < bombChance [j]) {
 					index = j;
 					break;
 				} else {
-					per -= bombPercentages [j];
+					per -= bombChance [j];
 				}
 			}
 
@@ -84,6 +84,31 @@ public class Ship : MonoBehaviour
 		if (bombList [0].isRedBomb) {
 			Bomb bomb = PopBomb ();
 			Destroy (bomb.gameObject);
+		}
+	}
+	#endregion
+
+	#region upgrade
+	private int[,] bombChanceList = new int[,] {
+		{80, 10, 0, 0, 0,  0, 0, 0, 0, 10},
+		{70, 15, 5, 0, 0,  0, 0, 0, 0, 10},
+		{60, 20, 5, 5, 0,  0, 0, 0, 0, 10},
+		{50, 25, 5, 5, 5,  0, 0, 0, 0, 10},
+
+		{40, 30, 5, 5, 5,  5, 0, 0, 0, 10},
+		{30, 35, 5, 5, 5,  5, 5, 0, 0, 10},
+		{20, 40, 5, 5, 5,  5, 5, 5, 0, 10},
+		{10, 45, 5, 5, 5,  5, 5, 5, 5, 10},
+		{5, 50, 5, 5, 5,  5, 5, 5, 5, 10},
+	};
+	
+	public void LevelUp (int level)
+	{
+		if (level >= 2 || level < bombChanceList.Length) {
+//			Debug.Log ("bombChanceList.GetLength(" + (level - 2) + ") : " + ));
+			for (int i=0; i<10; ++i) {
+				bombChance [i] = bombChanceList [level - 2, i];
+			}
 		}
 	}
 	#endregion
